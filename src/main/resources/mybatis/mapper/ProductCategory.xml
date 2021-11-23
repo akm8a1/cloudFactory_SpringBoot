@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.ProductCategoryMapper">
+    <select id="queryAllProductCategories" resultType="productCategory">
+        select id,typename,create_time,update_time from module_product_type_tab
+    </select>
+    <select id="queryProductCategoryByLikeName" resultType="productCategory">
+        select id,typename,create_time,update_time from module_product_type_tab where typename like concat('%',#{likename},'%')
+    </select>
+    <insert id="addProductCategory" parameterType="productCategory">
+        insert into module_product_type_tab (id,typename,create_time,update_time)
+        values (#{id},#{typename},#{create_time},#{update_time})
+    </insert>
+    <update id="updateProductCategory" parameterType="productCategory">
+        update module_product_type_tab set typename=#{typename},update_time=#{update_time} where id=#{id}
+    </update>
+    <delete id="deleteProductCategory">
+        delete from module_product_type_tab where id=#{id}
+    </delete>
+    <select id="getCounts" resultType="int">
+        select count(1) from module_product_type_tab
+    </select>
+    <select id="getProductCounts" resultType="int">
+        select count(1) from module_product_tab where typeid=#{id}
+    </select>
+</mapper>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.EquipmentInfoMapper">
+    <select id="queryAllEquipmentInfos" resultMap="equip">
+        select a.id as aid,
+               a.equip_code as aquip_code,
+               a.detail as adetail,
+               a.status as astatus,
+               a.equipmentcate_id as aequipmentcate_id,
+               a.factory_id as afactory_id,
+               a.rentstatus as arentstatus,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.name as bname,
+               c.id as cid,
+               c.name as cname
+        from equipment_info a inner join equipment_category b
+             on a.equipmentcate_id = b.id inner join factory c
+             on a.factory_id = c.id
+    </select>
+    <select id="queryEquipmentInByNo" resultMap="equip">
+        select a.id as aid,
+               a.equip_code as aquip_code,
+               a.detail as adetail,
+               a.status as astatus,
+               a.equipmentcate_id as aequipmentcate_id,
+               a.factory_id as afactory_id,
+               a.rentstatus as arentstatus,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.name as bname,
+               c.id as cid,
+               c.name as cname
+        from   equipment_info a inner join equipment_category b
+               on a.equipmentcate_id = b.id inner join factory c
+               on a.factory_id = c.id
+        where  a.equip_code = #{no}
+    </select>
+    <select id="queryAllEquipmentInfosByUserId" resultMap="equip">
+        select a.id as aid,
+               a.equip_code as aquip_code,
+               a.detail as adetail,
+               a.status as astatus,
+               a.equipmentcate_id as aequipmentcate_id,
+               a.factory_id as afactory_id,
+               a.rentstatus as arentstatus,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.name as bname,
+               c.id as cid,
+               c.name as cname
+        from equipment_info a inner join equipment_category b
+             on a.equipmentcate_id = b.id inner join factory c
+             on a.factory_id = c.id
+        where c.id = #{id}
+    </select>
+    <select id="queryAllEquipmentInfoRenable" resultMap="equip">
+        select a.id as aid,
+               a.equip_code as aquip_code,
+               a.detail as adetail,
+               a.status as astatus,
+               a.equipmentcate_id as aequipmentcate_id,
+               a.factory_id as afactory_id,
+               a.rentstatus as arentstatus,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.name as bname,
+               c.id as cid,
+               c.name as cname
+        from equipment_info a inner join equipment_category b
+             on a.equipmentcate_id = b.id inner join factory c
+             on a.factory_id = c.id
+        where a.rentstatus = '2' and c.id='00000000000000000000000000000001'
+    </select>
+    <insert id="addEquipmentInfo" parameterType="equipmentInfo">
+        insert into equipment_info
+            (id,equip_code,detail,status,equipmentcate_id,factory_id,rentstatus,create_time,update_time)
+            values
+            (#{id},#{equip_code},#{detail},#{status},#{equipmentcate_id},#{factory_id},#{rentstatus},#{create_time},#{update_time})
+    </insert>
+    <update id="updateEquipmentInfo" parameterType="equipmentInfo">
+        update equipment_info
+        set detail=#{detail},
+            status=#{status},
+            update_time= #{update_time}
+        where id = #{id}
+    </update>
+    <update id="rentOrback" parameterType="equipmentInfo">
+        update equipment_info
+        set factory_id = #{factory_id},
+            rentstatus = #{rentstatus},
+            update_time = #{update_time}
+        where id = #{id}
+    </update>
+    <update id="updateStatus">
+        update equipment_info set status = #{status}
+                                where id = #{id}
+    </update>
+    <delete id="deleteEquipmentInfo">
+        delete from equipment_info where id = #{id};
+    </delete>
+    <select id="queryAllEquipsWithOrder" resultMap="equip">
+        select a.id as aid,
+               a.equip_code as aquip_code,
+               a.detail as adetail,
+               a.status as astatus,
+               a.equipmentcate_id as aequipmentcate_id,
+               a.factory_id as afactory_id,
+               a.rentstatus as arentstatus,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.name as bname,
+               c.id as cid,
+               c.name as cname
+        from equipment_info a inner join equipment_category b
+                                         on a.equipmentcate_id = b.id inner join factory c
+                                                                                 on a.factory_id = c.id inner join module_scheduling_child_tab d
+                                                                                                                   on a.id = d.equipment_id inner join module_scheduling_tab e
+                                                                                                                                                       on e.id = d.main_id inner join module_order_tab f
+                                                                                                                                                                                      on f.id = e.orderid
+        where f.id = #{orderid}
+    </select>
+    <select id="getCounts" resultType="int">
+        select count(1) from equipment_info
+    </select>
+    <resultMap id="equip" type="equipmentInfo">
+        <id property="id" column="aid"/>
+        <result property="equip_code" column="aquip_code"/>
+        <result property="detail" column="adetail"/>
+        <result property="status" column="astatus"/>
+        <result property="rentstatus" column="arentstatus"/>
+        <result property="equipmentcate_id" column="bid"/>
+        <result property="factory_id" column="cid"/>
+        <result property="create_time" column="acreate_time"/>
+        <result property="update_time" column="aupdate_time"/>
+        <association property="equipmentCategory" javaType="equipmentCategory">
+            <id property="id" column="bid"/>
+            <result property="name" column="bname"/>
+        </association>
+        <association property="factory" javaType="factory">
+            <id property="id" column="cid"/>
+            <result property="name" column="cname"/>
+        </association>
+    </resultMap>
+</mapper>

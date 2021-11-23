@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.SchedulingChildMapper">
+    <select id="queryAllSchedulingChilds" resultMap="schedulingChild">
+        select a.id as aid,
+               a.begindate as abegindate,
+               a.enddate as aenddate,
+               a.equipment_id as aequipment_id,
+               a.main_id as amain_id,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.orderid as borderid,
+               c.id as cid,
+               c.equip_code as cequip_code,
+               d.id as did,
+               d.orderno as dorderno
+        from module_scheduling_child_tab a inner join module_scheduling_tab b
+                                                      on a.main_id = b.id inner join equipment_info c
+                                                                                     on a.equipment_id = c.id inner join module_order_tab d
+                                                                                                                         on b.orderid = d.id
+        where a.id = #{id};
+    </select>
+    <resultMap id="schedulingChild" type="schedulingChild">
+        <id property="id" column="aid"/>
+        <result property="begindate" column="abegindate"/>
+        <result property="enddate" column="aenddate"/>
+        <result property="create_time" column="acreate_time"/>
+        <result property="update_time" column="aupdate_time"/>
+        <result property="equipment_id" column="cid"/>
+        <result property="main_id" column="bid"/>
+        <association property="equipmentInfo" javaType="equipmentInfo">
+            <id property="id" column="cid"/>
+            <result property="equip_code" column="cequip_code"/>
+        </association>
+        <association property="scheduling" javaType="scheduling">
+            <id property="id" column="bid"/>
+            <association property="order" javaType="order">
+                <id property="id" column="did"/>
+                <result property="orderNo" column="dorderno"/>
+            </association>
+        </association>
+    </resultMap>
+    <insert id="addSchedulingChild" parameterType="schedulingChild">
+        insert into module_scheduling_child_tab (id,begindate,enddate,equipment_id,main_id,create_time,update_time)
+        values (#{id},#{begindate},#{enddate},#{equipment_id},#{main_id},#{create_time},#{update_time})
+    </insert>
+    <update id="updateSchedulingChild" parameterType="schedulingChild">
+        update module_scheduling_child_tab set begindate=#{begindate},
+                                               enddate=#{enddate},
+                                               update_time=#{update_time}
+                                        where id=#{id}
+    </update>
+    <delete id="deleteSchedulingChild">
+        delete from module_scheduling_child_tab where id=#{id}
+    </delete>
+</mapper>

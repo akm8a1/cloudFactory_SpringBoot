@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.EquipmentCategoryMapper">
+    <select id="queryAllEquipmentCategories" resultMap="equipmentCate">
+        select id as aid,
+               name as aname,
+               create_time as acreate_time,
+               update_time as aupdate_time
+        from equipment_category
+    </select>
+    <select id="queryEquipmentCategoryByName" resultMap="equipmentCate">
+        select id as aid,
+            name as aname,
+                create_time as acreate_time,
+               update_time as aupdate_time
+        from equipment_category where name like concat('%',#{likename},'%')
+    </select>
+    <insert id="addEquipmentCategory" parameterType="equipmentCategory">
+        insert into equipment_category (id,name,create_time,update_time)
+         values (#{id},#{name},#{create_time},#{update_time})
+    </insert>
+    <update id="updateEquipmentCategory" parameterType="equipmentCategory">
+        update equipment_category set name=#{name},update_time=#{update_time} where id=#{id};
+    </update>
+    <delete id="deleteEquipmentCategory">
+        delete from equipment_category where id=#{id}
+    </delete>
+    <select id="getCounts" resultType="int">
+        select count(1) from equipment_category
+    </select>
+    <select id="getEquipmentCounts" resultType="int">
+        select count(1) from equipment_info where equipmentcate_id=#{id}
+    </select>
+    <select id="getEquipmentFactoryCounts" resultType="int">
+        select count(1) from equipment_info
+        where equipmentcate_id=#{id} and factory_id=#{factoryid}
+    </select>
+    <resultMap id="equipmentCate" type="equipmentCategory">
+        <result property="id" column="aid"/>
+        <result property="name" column="aname"/>
+        <result property="create_time" column="acreate_time"/>
+        <result property="update_time" column="aupdate_time"/>
+    </resultMap>
+</mapper>

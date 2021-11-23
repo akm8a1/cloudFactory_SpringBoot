@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.ProductMapper">
+    <select id="queryAllProducts" resultMap="queryProduct">
+        select  a.id as aid,
+                a.typeid as atypeid,
+                a.productname as aproductname,
+                a.describe as adescribe,
+                a.productno as aproductno,
+                a.create_time as acreate_time,
+                a.update_time as aupdate_time,
+                b.id as bid,
+                b.typename as btypename
+        from module_product_tab a,module_product_type_tab b
+        where a.typeid = b.id
+    </select>
+    <select id="queryProductByName" resultMap="queryProduct">
+        select  a.id as aid,
+                a.typeid as atypeid,
+                a.productname as aproductname,
+                a.describe as adescribe,
+                a.productno as aproductno,
+                a.create_time as acreate_time,
+                a.update_time as aupdate_time,
+                b.id as bid,
+                b.typename as btypename
+        from module_product_tab a,module_product_type_tab b
+        where a.typeid = b.id and a.productname like concat('%',#{likename},'%')
+    </select>
+    <insert id="addProduct" parameterType="product">
+        insert into module_product_tab (id,typeid,productname,`describe`,productno,create_time,update_time)
+        values (#{id},#{typeid},#{productname},#{describe},#{productno},#{create_time},#{update_time})
+    </insert>
+    <update id="updateProduct" parameterType="product">
+        update module_product_tab set productname=#{productname},
+                                      `describe`=#{describe},
+                                      update_time=#{update_time}
+                                  where id=#{id}
+    </update>
+    <delete id="deleteProduct">
+        delete from module_product_tab where id=#{id}
+    </delete>
+    <resultMap id="queryProduct" type="product">
+        <id property="id" column="aid"/>
+        <result property="productname" column="aproductname"/>
+        <result property="describe" column="adescribe"/>
+        <result property="productno" column="aproductno"/>
+        <result property="typeid" column="bid"/>
+        <result property="create_time" column="acreate_time"/>
+        <result property="update_time" column="aupdate_time"/>
+        <association property="productCategory" javaType="productCategory">
+            <id property="id" column="bid"/>
+            <result property="typename" column="btypename"/>
+        </association>
+    </resultMap>
+    <select id="getCounts" resultType="int">
+        select count(1) from module_product_tab
+    </select>
+</mapper>

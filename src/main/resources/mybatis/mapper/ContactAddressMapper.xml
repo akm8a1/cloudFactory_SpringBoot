@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.ContactAddressTabMapper">
+    <select id="queryAllContact_address_tabs" resultType="contact_address_tab">
+        select * from contact_address_tab;
+    </select>
+    <insert id="addContact_address_tab" parameterType="contact_address_tab">
+        insert into contact_address_tab (id,receptname,address,contact,create_time,update_time)
+        values (#{id},#{receptname},#{address},#{contact},#{create_time},#{update_time})
+    </insert>
+    <update id="updateContact_address_tab" parameterType="contact_address_tab">
+        update contact_address_tab set receptname=#{receptname},address=#{address},contact=#{contact},update_time=#{update_time}
+    </update>
+    <delete id="deleteContact_address_tab">
+        delete from contact_address_tab where id = #{id}
+    </delete>
+    <select id="getCountsofContact" parameterType="contact_address_tab" resultType="int">
+        select count(*) from contact_address_tab where receptname=#{receptname}
+                                                   and contact=#{contact}
+                                                   and address=#{address}
+    </select>
+    <select id="queryContactByCond" parameterType="contact_address_tab" resultType="contact_address_tab">
+        select * from contact_address_tab where  receptname=#{receptname}
+                                                  and contact=#{contact}
+                                                  and address=#{address}
+    </select>
+</mapper>

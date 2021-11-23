@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.OrderMapper">
+    <select id="queryAllOrders" resultMap="orderResultMap">
+        select a.id as aid,
+               a.orderno as aorderno,
+               a.productid as aproductid,
+               a.ordernum as aordernum,
+               a.deaddate as adeaddate,
+               a.deliverDate as adeliverdate,
+               a.orderstatus as aorderstatus,
+               a.factoryid as afactoryid,
+               a.contact_id as acontactid,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               a.trader_id as atraderid,
+               b.id as bid,
+               b.typeid as btypeid,
+               b.productname as bproductname,
+               b.describe as bdescribe,
+               b.productno as bproductno,
+               b.create_time as bcreate_time,
+               b.update_time as bupdate_time,
+               c.id as cid,
+               c.name as cname,
+               c.detail as cdetail,
+               c.status as cstatus,
+               c.user_id as cuserid,
+               c.create_time as ccreate_time,
+               c.update_time as cupdate_time,
+               d.id as did,
+               d.typename as dname,
+               d.create_time as dcreate_time,
+               d.update_time as dupdate_time,
+               e.id as eid,
+               e.user_name as euser_name,
+               e.mobile as emobile,
+               f.id as fid,
+               f.receptname as freceptname,
+               f.address as faddress,
+               f.contact as fcontact,
+               f.create_time as fcreate_time,
+               f.update_time as fupdate_time
+        from module_order_tab a inner join module_product_tab b on a.productid=b.id inner join factory c on  a.factoryid = c.id
+                                inner join module_product_type_tab d on b.typeid=d.id inner join frame_user_tab e on c.user_id=e.id inner join
+                                contact_address_tab f on a.contact_id = f.id
+    </select>
+    <select id="queryOrdersByUserId" resultMap="orderResultMap">
+        select a.id as aid,
+               a.orderno as aorderno,
+               a.productid as aproductid,
+               a.ordernum as aordernum,
+               a.deaddate as adeaddate,
+               a.deliverDate as adeliverdate,
+               a.orderstatus as aorderstatus,
+               a.factoryid as afactoryid,
+               a.contact_id as acontactid,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               a.trader_id as atraderid,
+               b.id as bid,
+               b.typeid as btypeid,
+               b.productname as bproductname,
+               b.describe as bdescribe,
+               b.productno as bproductno,
+               b.create_time as bcreate_time,
+               b.update_time as bupdate_time,
+               c.id as cid,
+               c.name as cname,
+               c.detail as cdetail,
+               c.status as cstatus,
+               c.user_id as cuserid,
+               c.create_time as ccreate_time,
+               c.update_time as cupdate_time,
+               d.id as did,
+               d.typename as dname,
+               d.create_time as dcreate_time,
+               d.update_time as dupdate_time,
+               e.id as eid,
+               e.user_name as euser_name,
+               e.mobile as emobile,
+               f.id as fid,
+               f.receptname as freceptname,
+               f.address as faddress,
+               f.contact as fcontact,
+               f.create_time as fcreate_time,
+               f.update_time as fupdate_time
+        from module_order_tab a inner join module_product_tab b on a.productid=b.id inner join factory c on  a.factoryid = c.id
+                                inner join module_product_type_tab d on b.typeid=d.id inner join frame_user_tab e on c.user_id=e.id inner join
+                                contact_address_tab f on a.contact_id = f.id where a.trader_id=#{id}
+    </select>
+    <select id="queryOrderByNo" resultMap="orderResultMap">
+        select a.id as aid,
+               a.orderno as aorderno,
+               a.productid as aproductid,
+               a.ordernum as aordernum,
+               a.deaddate as adeaddate,
+               a.deliverDate as adeliverdate,
+               a.orderstatus as aorderstatus,
+               a.factoryid as afactoryid,
+               a.contact_id as acontactid,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               a.trader_id as atraderid,
+               b.id as bid,
+               b.typeid as btypeid,
+               b.productname as bproductname,
+               b.describe as bdescribe,
+               b.productno as bproductno,
+               b.create_time as bcreate_time,
+               b.update_time as bupdate_time,
+               c.id as cid,
+               c.name as cname,
+               c.detail as cdetail,
+               c.status as cstatus,
+               c.user_id as cuserid,
+               c.create_time as ccreate_time,
+               c.update_time as cupdate_time,
+               d.id as did,
+               d.typename as dname,
+               d.create_time as dcreate_time,
+               d.update_time as dupdate_time,
+               e.id as eid,
+               e.user_name as euser_name,
+               e.mobile as emobile,
+               f.id as fid,
+               f.receptname as freceptname,
+               f.address as faddress,
+               f.contact as fcontact,
+               f.create_time as fcreate_time,
+               f.update_time as fupdate_time
+        from module_order_tab a inner join module_product_tab b on a.productid=b.id inner join factory c on  a.factoryid = c.id
+                                inner join module_product_type_tab d on b.typeid=d.id inner join frame_user_tab e on c.user_id=e.id inner join
+                                contact_address_tab f on a.contact_id = f.id where a.orderno=#{no}
+    </select>
+    <insert id="addOrder" parameterType="order">
+        insert into module_order_tab (id,orderno,productid,ordernum,deaddate,deliverDate,orderstatus,factoryid,contact_id,create_time,update_time,trader_id)
+        values (#{id},#{orderno},#{productid},#{ordernum},#{deaddate},#{deliverDate},#{orderstatus},#{factoryid},#{contact_id},#{create_time},#{update_time},#{trader_id})
+    </insert>
+    <update id="updateOrder" parameterType="order">
+        update module_order_tab set productid=#{productid},
+                                    ordernum=#{ordernum},
+                                    deaddate=#{deaddate},
+                                    deliverDate=#{deliverDate},
+                                    factoryid=#{factoryid},
+                                    contact_id=#{contact_id},
+                                    update_time=#{update_time}
+                                where id=#{id}
+    </update>
+    <delete id="deleteOrder">
+        delete from module_order_tab where id=#{id}
+    </delete>
+    <resultMap id="orderResultMap" type="order">
+        <result property="id" column="aid"/>
+        <result property="orderno" column="aorderno"/>
+        <result property="ordernum" column="aordernum"/>
+        <result property="deaddate" column="adeaddate"/>
+        <result property="deliverDate" column="adeliverdate"/>
+        <result property="orderstatus" column="aorderstatus"/>
+        <result property="create_time" column="acreate_time"/>
+        <result property="update_time" column="aupdate_time"/>
+        <result property="trader_id" column="atraderid"/>
+        <result property="productid" column="bid"/>
+        <result property="factoryid" column="cid"/>
+        <result property="contact_id" column="fid"/>
+        <association property="product" javaType="product">
+            <id property="id" column="bid"/>
+            <result property="productname" column="bproductname"/>
+            <result property="describe" column="bdescribe"/>
+            <result property="productno" column="bproductno"/>
+            <result property="create_time" column="bcreate_time"/>
+            <result property="update_time" column="bupdate_time"/>
+            <association property="productCategory" javaType="productCategory">
+                <id property="id" column="did"/>
+                <result property="typename" column="dname"/>
+                <result property="create_time" column="dcreate_time"/>
+                <result property="update_time" column="dupdate_time"/>
+            </association>
+        </association>
+        <association property="factory" javaType="factory">
+            <id property="id" column="cid"/>
+            <result property="name" column="cname"/>
+            <result property="detail" column="cdetail"/>
+            <result property="status" column="cstatus"/>
+            <result property="user_id" column="cuserid"/>
+            <result property="user_name" column="euser_name"/>
+            <result property="mobile" column="emobile"/>
+        </association>
+        <association property="contact" javaType="contact_address_tab">
+            <id property="id" column="fid"/>
+            <result property="receptname" column="freceptname"/>
+            <result property="address" column="faddress"/>
+            <result property="contact" column="fcontact"/>
+            <result property="create_time" column="fcreate_time"/>
+            <result property="update_time" column="fupdate_time"/>
+        </association>
+    </resultMap>
+    <select id="queryFactoryOrdersByUserId" resultMap="orderResultMap">
+        <include refid="selectOrders"></include>
+        where e.id = #{id}
+    </select>
+    <select id="queryTraderOrdersByUserId" resultMap="orderResultMap">
+       <include refid="selectOrders"></include>
+        where a.trader_id= #{id}
+    </select>
+    <select id="queryOrdersBidable" resultMap="orderResultMap">
+        select a.id as aid,
+               a.orderno as aorderno,
+               a.productid as aproductid,
+               a.ordernum as aordernum,
+               a.deaddate as adeaddate,
+               a.deliverDate as adeliverdate,
+               a.orderstatus as aorderstatus,
+               a.factoryid as afactoryid,
+               a.contact_id as acontactid,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               a.trader_id as atraderid,
+               b.id as bid,
+               b.typeid as btypeid,
+               b.productname as bproductname,
+               b.describe as bdescribe,
+               b.productno as bproductno,
+               b.create_time as bcreate_time,
+               b.update_time as bupdate_time,
+               c.id as cid,
+               c.name as cname,
+               c.detail as cdetail,
+               c.status as cstatus,
+               c.user_id as cuserid,
+               c.create_time as ccreate_time,
+               c.update_time as cupdate_time,
+               d.id as did,
+               d.typename as dname,
+               d.create_time as dcreate_time,
+               d.update_time as dupdate_time,
+               e.id as eid,
+               e.user_name as euser_name,
+               e.mobile as emobile,
+               f.id as fid,
+               f.receptname as freceptname,
+               f.address as faddress,
+               f.contact as fcontact,
+               f.create_time as fcreate_time,
+               f.update_time as fupdate_time
+        from module_order_tab a inner join module_product_tab b on a.productid=b.id inner join factory c on  a.factoryid = c.id
+                                inner join module_product_type_tab d on b.typeid=d.id inner join frame_user_tab e on c.user_id=e.id inner join
+             contact_address_tab f on a.contact_id = f.id
+        where a.orderstatus = 2 and not exists (select * from module_bid_tab where orderid=a.id
+                                                and factoryid=#{factoryid})
+    </select>
+    <update id="updateStatus">
+        update module_order_tab set orderstatus=#{status},update_time=now() where id=#{id}
+    </update>
+    <update id="bidComplete">
+        update module_order_tab set factoryid=#{factoryid},orderstatus=3,update_time=now()
+        where id=#{orderid}
+    </update>
+    <select id="queryOrderById" resultMap="orderResultMap">
+        select a.id as aid,
+               a.orderno as aorderno,
+               a.productid as aproductid,
+               a.ordernum as aordernum,
+               a.deaddate as adeaddate,
+               a.deliverDate as adeliverdate,
+               a.orderstatus as aorderstatus,
+               a.factoryid as afactoryid,
+               a.contact_id as acontactid,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               a.trader_id as atraderid,
+               b.id as bid,
+               b.typeid as btypeid,
+               b.productname as bproductname,
+               b.describe as bdescribe,
+               b.productno as bproductno,
+               b.create_time as bcreate_time,
+               b.update_time as bupdate_time,
+               c.id as cid,
+               c.name as cname,
+               c.detail as cdetail,
+               c.status as cstatus,
+               c.user_id as cuserid,
+               c.create_time as ccreate_time,
+               c.update_time as cupdate_time,
+               d.id as did,
+               d.typename as dname,
+               d.create_time as dcreate_time,
+               d.update_time as dupdate_time,
+               e.id as eid,
+               e.user_name as euser_name,
+               e.mobile as emobile,
+               f.id as fid,
+               f.receptname as freceptname,
+               f.address as faddress,
+               f.contact as fcontact,
+               f.create_time as fcreate_time,
+               f.update_time as fupdate_time
+        from module_order_tab a inner join module_product_tab b on a.productid=b.id inner join factory c on  a.factoryid = c.id
+                                inner join module_product_type_tab d on b.typeid=d.id inner join frame_user_tab e on c.user_id=e.id inner join
+             contact_address_tab f on a.contact_id = f.id
+        where a.id = #{id}
+    </select>
+    <select id="getCounts" resultType="int">
+        select count(1) from module_order_tab
+    </select>
+    <sql id="selectOrders">
+        select a.id as aid,
+               a.orderno as aorderno,
+               a.productid as aproductid,
+               a.ordernum as aordernum,
+               a.deaddate as adeaddate,
+               a.deliverDate as adeliverdate,
+               a.orderstatus as aorderstatus,
+               a.factoryid as afactoryid,
+               a.contact_id as acontactid,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               a.trader_id as atraderid,
+               b.id as bid,
+               b.typeid as btypeid,
+               b.productname as bproductname,
+               b.describe as bdescribe,
+               b.productno as bproductno,
+               b.create_time as bcreate_time,
+               b.update_time as bupdate_time,
+               c.id as cid,
+               c.name as cname,
+               c.detail as cdetail,
+               c.status as cstatus,
+               c.user_id as cuserid,
+               c.create_time as ccreate_time,
+               c.update_time as cupdate_time,
+               d.id as did,
+               d.typename as dname,
+               d.create_time as dcreate_time,
+               d.update_time as dupdate_time,
+               e.id as eid,
+               e.user_name as euser_name,
+               e.mobile as emobile,
+               f.id as fid,
+               f.receptname as freceptname,
+               f.address as faddress,
+               f.contact as fcontact,
+               f.create_time as fcreate_time,
+               f.update_time as fupdate_time
+        from module_order_tab a inner join module_product_tab b on a.productid=b.id inner join factory c on  a.factoryid = c.id
+                                inner join module_product_type_tab d on b.typeid=d.id inner join frame_user_tab e on c.user_id=e.id inner join
+             contact_address_tab f on a.contact_id = f.id
+    </sql>
+</mapper>

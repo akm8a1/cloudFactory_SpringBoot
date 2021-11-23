@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.AbilityMapper">
+    <select id="queryAllAbilities" resultMap="abilt">
+        select a.id as aid,
+               a.equipment_id as aequip_id,
+               a.product_id as aproduct_id,
+               a.ability as aability,
+               a.factory_id as afactory_id,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.equip_code as bequip_code,
+               c.id as cid,
+               c.productno as cproductno,
+               d.id as did,
+               d.name as dname
+        from equipment_ability a inner join equipment_info b
+             on a.equipment_id = b.id inner join module_product_tab c
+             on a.product_id = c.id inner join factory d
+             on a.factory_id = d.id
+    </select>
+    <insert id="addAbility" parameterType="ability">
+        insert into equipment_ability (equipment_id,product_id,ability,factory_id,create_time,update_time,id)
+        values (#{equipment_id},#{product_id},#{ability},#{factory_id},#{create_time},#{update_time},#{id})
+    </insert>
+    <update id="updateAbility" parameterType="ability">
+        update equipment_ability set ability=#{ability},update_time=#{update_time} where id=#{id}
+    </update>
+    <delete id="deleteAbility">
+        delete from equipment_ability where id=#{id}
+    </delete>
+    <resultMap id="abilt" type="ability">
+        <id property="id" column="aid"/>
+        <result property="ability" column="aability"/>
+        <result property="create_time" column="acreate_time"/>
+        <result property="update_time" column="aupdate_time"/>
+        <association property="equipmentInfo" javaType="equipmentInfo">
+            <id property="id" column="bid"/>
+            <result property="equip_code" column="bequip_code"/>
+        </association>
+        <association property="product" javaType="product">
+            <id property="id" column="cid"/>
+            <result property="productNo" column="cproductno"/>
+        </association>
+        <association property="factory" javaType="factory">
+            <id property="id" column="did"/>
+            <id property="name" column="dname"/>
+        </association>
+    </resultMap>
+</mapper>

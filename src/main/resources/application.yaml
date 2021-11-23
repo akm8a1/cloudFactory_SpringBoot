@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    username: root
+    password: 180018ly
+    url: jdbc:mysql://localhost:3306/cloudfactory?useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    #Spring不会配置连接池的具体配置
+
+    initial-size: 5
+    minIdle: 5
+    maxActive: 20
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  mail:
+    host: smtp.qq.com
+    username: 2661190790@qq.com
+    password: wpjophkwflyveaeb
+    default-encoding: UTF-8
+    protocol: smtp
+    test-connection: false
+
+
+
+mybatis:
+  type-aliases-package: com.liu.pojo
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+server:
+  port: 8081
+#分页pageHelper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true

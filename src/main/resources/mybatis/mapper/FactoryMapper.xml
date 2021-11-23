@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.FactoryMapper">
+    <insert id="addFactory" parameterType="factory">
+        insert into factory(id,name,detail,status,user_id,create_time,update_time) values (#{id},#{name},#{detail},#{status},#{user_id},#{create_time},#{update_time})
+    </insert>
+    <select id="queryFactorys" resultType="factory">
+        select a.id,a.name,a.detail,a.status,a.user_id,b.user_name,b.mobile,a.create_time,a.update_time from factory a,frame_user_tab b where a.user_id=b.id
+    </select>
+    <select id="queryFactoryByUserId" resultType="factory">
+        select a.id,a.name,a.detail,a.status,a.user_id,b.user_name,b.mobile,a.create_time,a.update_time from factory a,frame_user_tab b
+        where a.user_id=b.id and a.user_id=#{id}
+    </select>
+    <select id="queryFactoryByLikeName" resultType="factory">
+        select a.id,a.name,a.detail,a.status,a.user_id,b.user_name,b.mobile,a.create_time,a.update_time from factory a,frame_user_tab b where a.user_id=b.id and name like concat('%',#{likename},'%')
+    </select>
+    <select id="queryFactoryById" resultType="factory">
+        select a.id,a.name,a.detail,a.status,a.user_id,b.user_name,b.mobile,a.create_time,a.update_time from factory a,frame_user_tab b where a.user_id=b.id and a.id=#{id}
+    </select>
+    <delete id="deleteFactory">
+        delete from factory where id=#{id}
+    </delete>
+    <update id="updateFactory" parameterType="factory">
+        update factory set name=#{name},detail=#{detail},status=#{status},update_time=#{update_time} where id=#{id}
+    </update>
+    <select id="queryFactoryByOrderId" resultType="factory">
+        select a.id,a.name,a.detail,a.status,a.user_id,b.user_name,b.mobile,a.create_time,a.update_time
+        from factory a inner join frame_user_tab b on a.user_id=b.id inner join module_order_tab c
+            on c.factoryid = a.id where c.id=#{orderid}
+    </select>
+</mapper>

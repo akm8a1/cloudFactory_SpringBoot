@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.SchedulingMapper">
+    <select id="queryAllSchedulings" resultMap="sche">
+        select a.id as aid,
+               a.orderid as aorderid,
+               a.begindate as abegindate,
+               a.enddate as aenddate,
+               a.equipment_id as aequipmentid,
+               a.factoryid as afactoryid,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               c.id as cid,
+               c.name as cname,
+               d.id as did,
+               d.orderno as dorderno
+        from module_scheduling_tab a inner join  module_order_tab d
+                                                 on a.orderid = d.id inner join factory c on a.factoryid = c.id;
+    </select>
+    <insert id="addScheduling" parameterType="scheduling">
+        insert into module_scheduling_tab (id,orderid,begindate,enddate,factoryid,create_time,update_time)
+        values (#{id},#{orderid},#{begindate},#{enddate},#{factoryid},#{create_time},#{update_time})
+    </insert>
+    <update id="updateScheduling" parameterType="scheduling">
+        update module_scheduling_tab set begindate=#{begindate},
+                                         enddate=#{enddate},
+                                         update_time=#{update_time}
+                                     where id=#{id}
+    </update>
+    <delete id="deleteScheduling">
+        delete from module_scheduling_child_tab where id=#{id}
+    </delete>
+    <resultMap id="sche" type="scheduling">
+        <id property="id" column="aid"/>
+        <result property="begindate" column="abegindate"/>
+        <result property="enddate" column="aenddate"/>
+        <result property="create_time" column="acreate_time"/>
+        <result property="update_time" column="aupdate_time"/>
+        <result property="orderid" column="did"/>
+        <result property="factoryid" column="cid"/>
+        <association property="order" javaType="order">
+            <id property="id" column="did"/>
+            <result property="orderNo" column="dorderno"/>
+        </association>
+        <association property="factory" javaType="factory">
+            <id property="id" column="cid"/>
+            <result property="name" column="cname"/>
+        </association>
+    </resultMap>
+</mapper>

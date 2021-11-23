@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.UserMapper">
+    <select id="queryUsers" resultMap="UserToRole">
+        select a.id as uid,
+               a.login_name as username,
+               a.user_name as uname,
+               a.password as password,
+               a.mobile as mobile,
+               a.email as email,
+               a.create_time as create_time,
+               a.update_time as update_time,
+               b.id as rid,
+               b.rolename as rname,
+               b.remark as remark
+        from frame_user_tab a,frame_role_tab b
+        where a.roleid = b.id
+    </select>
+    <select id="queryUserById" resultMap="UserToRole">
+        select a.id as uid,
+               a.login_name as username,
+               a.user_name as uname,
+               a.password as password,
+               a.mobile as mobile,
+               a.email as email,
+               a.create_time as create_time,
+               a.update_time as update_time,
+               b.id as rid,
+               b.rolename as rname,
+               b.remark as remark
+        from frame_user_tab a,frame_role_tab b
+        where a.id = #{id} and a.roleid = b.id
+    </select>
+    <update id="updateUser" parameterType="user">
+        update frame_user_tab
+        set login_name = #{login_name},
+            password = #{password},
+            user_name = #{user_name},
+            mobile = #{mobile},
+            email = #{mobile},
+            update_time = #{update_time}
+        where id = #{id}
+    </update>
+    <insert id="insertUser" parameterType="user">
+        insert into frame_user_tab
+            (id,login_name,password,user_name,mobile,roleid,email,create_time,update_time)
+        values
+            (#{id},#{login_name},#{password},#{user_name},#{mobile},#{roleid},#{email},#{create_time},#{update_time})
+    </insert>
+    <delete id="deleteUser" >
+        delete from frame_user_tab where id = #{id};
+    </delete>
+    <select id="login" resultMap="UserToRole">
+        select a.id as uid,
+               a.login_name as username,
+               a.user_name as uname,
+               a.password as password,
+               a.mobile as mobile,
+               a.email as email,
+               a.create_time as create_time,
+               a.update_time as update_time,
+               b.id as rid,
+               b.rolename as rname,
+               b.remark as remark
+        from frame_user_tab a,frame_role_tab b
+        where a.roleid = b.id and login_name = #{login_name} and password = #{password}
+    </select>
+    <select id="getUserCounts" resultType="int">
+        select count(1) from frame_user_tab
+    </select>
+    <select id="getAdmins" resultType="int">
+        select count(1) from frame_user_tab where roleid='1'
+    </select>
+    <select id="getFactorys" resultType="int">
+        select count(1) from frame_user_tab where roleid='2'
+    </select>
+    <select id="getTraders" resultType="int">
+        select count(1) from frame_user_tab where roleid='3'
+    </select>
+    <select id="queryUsersByListName" resultMap="UserToRole">
+        select a.id as uid,
+               a.login_name as username,
+               a.user_name as uname,
+               a.password as password,
+               a.mobile as mobile,
+               a.email as email,
+               a.create_time as create_time,
+               a.update_time as update_time,
+               b.id as rid,
+               b.rolename as rname,
+               b.remark as remark
+        from frame_user_tab a,frame_role_tab b
+        where a.roleid = b.id and a.user_name like concat('%',#{likename},'%')
+    </select>
+    <select id="getUserIdByOrderAndBid" resultType="string">
+        select a.id from frame_user_tab a inner join factory b
+            on b.user_id=a.id inner join module_bid_tab c
+            on b.id=c.factoryid
+        where c.orderid = #{orderid}
+    </select>
+    <resultMap id="UserToRole" type="user">
+        <result property="id" column="uid"></result>
+        <result property="login_name" column="username"></result>
+        <result property="user_name" column="uname"></result>
+        <result property="password" column="password"></result>
+        <result property="mobile" column="mobile"></result>
+        <result property="email"  column="email"></result>
+        <result property="create_time" column="create_time"></result>
+        <result property="update_time" column="update_time"></result>
+        <result property="roleid" column="rid"></result>
+        <association property="role" javaType="role">
+            <id property="id" column="rid"></id>
+            <result property="rolename" column="rname"></result>
+            <result property="remark" column="remark"></result>
+        </association>
+    </resultMap>
+</mapper>

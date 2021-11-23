@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.BidMapper">
+    <select id="queryAllBids" resultMap="Bid">
+        select a.id as aid,
+               a.orderid as aorderid,
+               a.factoryid as afactoryid,
+               a.bidprice as abidprice,
+               a.bidstatus as abidstatus,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.orderno as borderno,
+               b.trader_id as btrader_id,
+               c.id as cid,
+               c.name as cname
+        from module_bid_tab a,module_order_tab b,factory c
+        where a.orderid=b.id and a.factoryid=c.id
+    </select>
+    <select id="queryBidsByOrderNo" resultMap="Bid">
+        select a.id as aid,
+               a.orderid as aorderid,
+               a.factoryid as afactoryid,
+               a.bidprice as abidprice,
+               a.bidstatus as abidstatus,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.orderno as borderno,
+               b.trader_id as btrader_id,
+               c.id as cid,
+               c.name as cname
+        from module_bid_tab a,module_order_tab b,factory c
+        where a.orderid=b.id and a.factoryid=c.id and b.orderno=#{orderno}
+    </select>
+    <select id="queryBidsByTraderUserId" resultMap="Bid">
+        select a.id as aid,
+               a.orderid as aorderid,
+               a.factoryid as afactoryid,
+               a.bidprice as abidprice,
+               a.bidstatus as abidstatus,
+               a.create_time as acreate_time,
+               a.update_time as aupdate_time,
+               b.id as bid,
+               b.orderno as borderno,
+               b.trader_id as btrader_id,
+               c.id as cid,
+               c.name as cname
+        from module_bid_tab a,module_order_tab b,factory c
+        where a.orderid=b.id and a.factoryid=c.id and b.trader_id = #{id} order by b.orderno
+    </select>
+    <insert id="addBid" parameterType="bid">
+        insert into module_bid_tab (id,orderid,factoryid,bidprice,bidstatus,create_time,update_time)
+        values (#{id},#{orderid},#{factoryid},#{bidprice},#{bidstatus},#{create_time},#{update_time})
+    </insert>
+    <update id="updateBid" parameterType="bid">
+        update module_bid_tab set bidprice=#{bidprice},update_time=#{update_time}
+    </update>
+    <delete id="deleteBid">
+        delete from module_bid_tab where id=#{id}
+    </delete>
+    <update id="selectBid">
+        update module_bid_tab set bidstatus=1,update_time=now() where id = #{id}
+    </update>
+    <select id="getCounts" resultType="int">
+        select count(1) from module_bid_tab;
+    </select>
+    <resultMap id="Bid" type="bid">
+        <id property="id" column="aid"/>
+        <result property="bidprice" column="abidprice"/>
+        <result property="bidstatus" column="abidstatus"/>
+        <result property="create_time" column="acreate_time"/>
+        <result property="update_time" column="aupdate_time"/>
+        <result property="orderid" column="bid"/>
+        <result property="orderno" column="borderno"/>
+        <result property="factoryid" column="cid"/>
+        <association property="order" javaType="order">
+            <id property="id" column="bid"/>
+            <result property="orderno" column="borderno"/>
+            <result property="trader_id" column="btrader_id"/>
+        </association>
+        <association property="factory" javaType="factory">
+            <id property="id" column="cid"/>
+            <result property="name" column="cname"/>
+        </association>
+    </resultMap>
+</mapper>
